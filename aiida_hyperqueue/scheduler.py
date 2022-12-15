@@ -138,7 +138,7 @@ class HyperQueueScheduler(Scheduler):
             hq_options.append(f'--priority={job_tmpl.priority}')
 
         if job_tmpl.job_resource.num_cores:
-            hq_options.append(f'--cpus={job_tmpl.job_resource.num_cores}')
+            hq_options.append(f'--pin taskset --cpus={job_tmpl.job_resource.num_cores}')
 
         return '#HQ ' + ' '.join(hq_options)
 
@@ -214,7 +214,8 @@ class HyperQueueScheduler(Scheduler):
         if user:
             raise FeatureNotAvailable('Cannot query by user with HyperQueue')
 
-        return 'hq jobs waiting running'
+        # return 'hq jobs waiting running'
+        return 'hq job list --filter waiting,running'
 
     def _parse_joblist_output(self, retval: int, stdout: str,
                               stderr: str) -> list:
@@ -257,7 +258,7 @@ class HyperQueueScheduler(Scheduler):
         """
         Return the command to kill the job with specified jobid.
         """
-        submit_command = f'hq cancel {jobid}'
+        submit_command = f'hq job cancel {jobid}'
 
         self.logger.info(f'killing job {jobid}')
 
