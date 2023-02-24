@@ -87,8 +87,8 @@ def add_cmd(slurm_options, computer, time_limit, enable_hyperthreading):
     """Add a new allocation to the HQ server."""
 
     #hyper = '' if enable_hyperthreading else '--cpus no-ht'
-    #hyper = '' if enable_hyperthreading else '--resource "--no-hyper-threading"'
-    hyper = ''
+    hyper = '' if enable_hyperthreading else '--no-hyper-threading'
+    # hyper = ''
 
     with computer.get_transport() as transport:
         retval, _, stderr = transport.exec_command_wait(
