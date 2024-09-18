@@ -128,8 +128,10 @@ class HyperQueueScheduler(Scheduler):
             # will kill job the job in case the job takes more time (e.g. it hangs).
             # This is the typical behavior of schedulers and avoids that if one run enters an infinite loop,
             # it burns all the time of the worker.
+            # I should not set time-request too large: job won't start. E.g., time-limit = 1 day, divided by 48 means
+            # time-request = 30min.
             hq_options.append(
-                f'--time-request={job_tmpl.max_wallclock_seconds}s --time-limit={job_tmpl.max_wallclock_seconds}s'
+                f'--time-request={int(job_tmpl.max_wallclock_seconds/48)}s --time-limit={job_tmpl.max_wallclock_seconds}s'
             )
 
         if job_tmpl.priority:
