@@ -55,7 +55,7 @@ class HyperQueueJobResource(JobResource):
         resources = AttributeDict()
 
         try:
-            resources.num_cores = int(kwargs.pop('num_cores'))
+            resources.num_cores = int(kwargs.pop('num_cores', 1))
         except (KeyError, ValueError) as exception:
             raise ValueError(
                 '`num_cores` must be specified and must be an integer'
